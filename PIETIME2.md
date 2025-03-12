@@ -116,6 +116,7 @@ The %p works, as C the printf function has different format string options one o
 Step 5: Using the Format String Vulnerability
 
 Using this new technique, I started off with only using %p to see if I would get any type of output from the program. Which I ended up getting part of a memory address as shown below:
+
 ![image](https://github.com/user-attachments/assets/e3e0c15d-e63d-465b-9fb4-d68bdba55f44)
 
 Seeing this, I made the assumption that I had to put more %p into the buffer to get more output. So, I kept adding %p until I eventually ran into an error which prevented me from adding more to the input. Now having the memory addresses, I ended up brute forcing the memory addresses into the program till I eventually found two different addresses that wouldn't produce a `Segfault Occurred, incorrect address` error. I noted down which positions they were in as the memory addresses would randomize because of Address Space Layout Randomization (ASLR). 
