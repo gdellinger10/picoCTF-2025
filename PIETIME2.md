@@ -1,8 +1,13 @@
 ***
+
 **Title**: Binary Exploitation - PIE TIME 2
+
 **CTF Title**: PIE TIME
+
 **Category**: Binary Exploitation
+
 **Difficulty**: HARD
+
 **Description**: Given a binary file and a C source file and told to find the flag.
 
 ***
