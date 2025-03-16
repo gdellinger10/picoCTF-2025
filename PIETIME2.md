@@ -110,9 +110,7 @@ With this complete I knew I had an offset of 96 bytes.
 
 Step 4: Finding the Main Function Memory Address
 
-Now knowing the offset, I needed to find which memory address was for the function main. To do this, I asked chatgpt "What vulnerability can be exploited to leak the address?" as it was a hint given on the CTF. Chatgpt informed me that a format string vulnerability could be used. Not knowing how to perform the attack, I asked Chatgpt to explain how to perform it and had it analyze the source code to see where it could be performed. Chatgpt told me to use %p (more information on why below) and that because there is no input validation for the buffer, that I should be able to use it within the buffer.
-
-The %p works, as C the printf function has different format string options one of those being %p. Which when specified is used to print the memory address of a variable or object.
+Now knowing the offset, I needed to find which memory address was for the function main. To do this, I asked chatgpt "What vulnerability can be exploited to leak the address?" as it was a hint given on the CTF. ChatGPT told me that I could use %p, which is a format specifier in printf() that prints the memory address of a variable or object. Since there was no input validation for the buffer, I could exploit the format string vulnerability by using %p to leak memory addresses from the stack.
 
 Step 5: Using the Format String Vulnerability
 
@@ -120,12 +118,12 @@ Using this new technique, I started off with only using %p to see if I would get
 
 ![image](https://github.com/user-attachments/assets/e3e0c15d-e63d-465b-9fb4-d68bdba55f44)
 
-Seeing this, I made the assumption that I had to put more %p into the buffer to get more output. So, I kept adding %p until I eventually ran into an error which prevented me from adding more to the input. Now having the memory addresses, I ended up brute forcing the memory addresses into the program till I eventually found two different addresses that wouldn't produce a `Segfault Occurred, incorrect address` error. I noted down which positions they were in as the memory addresses would randomize because of Address Space Layout Randomization (ASLR). 
+Seeing this, I made the assumption that I had to put more %p into the buffer to get more output. So, I kept adding %p until I eventually ran into an error which prevented me from adding more to the input. Now having the memory addresses, I iterated through the memory addresses printed by %p and found two valid addresses that didn't trigger the Segfault Occurred, incorrect address error. I noted down which positions they were in as the memory addresses would randomize because of Address Space Layout Randomization (ASLR). 
 
 ![image](https://github.com/user-attachments/assets/4ca404d4-8aa3-4743-91cd-347f460f9738)
 
 
-With these two addresses, I went and subtracted the offset from each and attempted to put in the far right address in first, which ended up giving no error but at the same time gave no output. So, I went back through and attempted the left address. Which ended up running the win function and producing the flag.
+With these two addresses, I went and subtracted the offset from each. I then attempted to input the far right address first, which didn't trigger any error but also didn't produce any output. This lack of output could be due to Address Space Layout Randomization (ASLR), which randomized the memory addresses each time the program was run. After seeing this, I tried the other address which then produced the flag.
 
 ![image](https://github.com/user-attachments/assets/0ee1b1d3-fcb8-43e2-b6c1-1aa348110a4f)
 
